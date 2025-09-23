@@ -11,11 +11,12 @@ import { MatRippleModule } from '@angular/material/core';
 
 import { ResponsiveService } from '../../core/services/responsive.service';
 import * as ClaimsActions from '../../store/claims/claims.actions';
-import { 
-  selectRecentClaims, 
-  selectClaimsSummary, 
+import {
+  selectRecentClaims,
+  selectClaimsSummary,
   selectClaimsLoading
 } from '../../store/claims/claims.selectors';
+import { Claim } from '../../models/claims.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,73 +41,66 @@ import {
             <p class="text-gray-600">Quickly file new claims and track existing ones</p>
           </div>
           @if (!responsiveService.isMobile()) {
-            <div class="flex space-x-3">
-              <button 
-                mat-raised-button 
+            <div class="flex flex-col items-end space-y-2">
+              <button
+                mat-raised-button
                 color="primary"
                 routerLink="/claims/new"
                 class="btn-primary">
                 <mat-icon>add</mat-icon>
                 New Claim
               </button>
-              <button 
-                mat-stroked-button
-                (click)="refreshData()"
-                [disabled]="isLoading()">
-                <mat-icon>refresh</mat-icon>
-                Refresh
-              </button>
+              <div class="flex items-center space-x-2">
+                <button
+                  mat-stroked-button
+                  [routerLink]="['/claims/new']"
+                  [queryParams]="{ workshop: true }">
+                  <mat-icon>build</mat-icon>
+                  Workshop
+                </button>
+                <button
+                  mat-stroked-button
+                  (click)="refreshData()"
+                  [disabled]="isLoading()">
+                  <mat-icon>refresh</mat-icon>
+                  Refresh
+                </button>
+              </div>
             </div>
           }
         </div>
 
         @if (responsiveService.isMobile()) {
-          <div class="flex space-x-3 mb-6">
-            <button 
-              mat-raised-button 
-              color="primary"
-              routerLink="/claims/new"
-              class="flex-1 btn-primary">
-              <mat-icon>add</mat-icon>
-              New Claim
-            </button>
-            <button 
-              mat-icon-button
-              (click)="refreshData()"
-              [disabled]="isLoading()"
-              class="border border-gray-300">
-              <mat-icon>refresh</mat-icon>
+          <div class="flex flex-col space-y-2 mb-6">
+            <div class="flex space-x-3">
+              <button
+                mat-raised-button
+                color="primary"
+                routerLink="/claims/new"
+                class="flex-1 btn-primary">
+                <mat-icon>add</mat-icon>
+                New Claim
+              </button>
+              <button
+                mat-icon-button
+                (click)="refreshData()"
+                [disabled]="isLoading()"
+                class="border border-gray-300">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </div>
+            <button
+              mat-stroked-button
+              [routerLink]="['/claims/new']"
+              [queryParams]="{ workshop: true }"
+              class="w-full">
+              <mat-icon>build</mat-icon>
+              Workshop
             </button>
           </div>
         }
       </div>
 
-      <!-- Stats (simplified) -->
-      <div [class]="statsRowClasses()" class="mb-8">
-        <div class="card w-full flex-1">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Total Claims</p>
-              <p class="text-2xl font-bold text-gray-900">{{ claimsSummary()?.totalClaims || 0 }}</p>
-            </div>
-            <div class="p-3 bg-blue-100 rounded-xl">
-              <mat-icon class="text-blue-600">description</mat-icon>
-            </div>
-          </div>
-        </div>
-
-        <div class="card w-full flex-1">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Pending</p>
-              <p class="text-2xl font-bold text-orange-600">{{ claimsSummary()?.pendingClaims || 0 }}</p>
-            </div>
-            <div class="p-3 bg-orange-100 rounded-xl">
-              <mat-icon class="text-orange-600">hourglass_empty</mat-icon>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- Recent Claims -->
       <div class="card">
@@ -124,44 +118,25 @@ import {
           <div class="flex justify-center py-8">
             <mat-spinner diameter="40"></mat-spinner>
           </div>
-        } @else if (recentClaims().length === 0) {
-          <div class="text-center py-8">
-            <mat-icon class="text-6xl text-gray-300 mb-4">description</mat-icon>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No Claims Yet</h3>
-            <p class="text-gray-600 mb-4">Start by filing your first insurance claim</p>
-            <button 
-              mat-raised-button 
-              color="primary"
-              routerLink="/claims/new">
-              File Your First Claim
-            </button>
-          </div>
         } @else {
           <div class="space-y-4">
-            @for (claim of recentClaims(); track claim.id) {
+            @for (claim of displayedClaims(); track claim.id) {
               <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
                     <div [class]="getClaimTypeIconClass(claim.type)" class="p-2 rounded-lg">
                       <mat-icon>{{ getClaimTypeIcon(claim.type) }}</mat-icon>
                     </div>
                     <div>
                       <h3 class="font-semibold text-gray-900">{{ claim.claimNumber }}</h3>
-                      <p class="text-sm text-gray-600">{{ claim.type | titlecase }}</p>
+                      <p class="text-sm text-gray-600">{{ getClaimTypeLabel(claim.type) }}</p>
                     </div>
                   </div>
-                  <mat-chip 
+                  <mat-chip
                     [class]="getStatusChipClass(claim.status)"
                     class="text-xs font-medium">
                     {{ claim.status | titlecase }}
                   </mat-chip>
-                </div>
-                
-                <p class="text-sm text-gray-700 mb-3 line-clamp-2">{{ claim.description }}</p>
-                
-                <div class="flex items-center justify-between text-sm text-gray-600">
-                  <span>{{ claim.dateReported | date:'mediumDate' }}</span>
-                  <span>{{ claim.estimatedDamage | currency }}</span>
                 </div>
               </div>
             }
@@ -212,6 +187,40 @@ export class DashboardComponent implements OnInit {
   private store = inject(Store);
   protected responsiveService = inject(ResponsiveService);
 
+  // Mock recent claims fallback
+  readonly mockClaims: Claim[] = [
+    {
+      id: '1', claimNumber: 'CLA-0001', policyNumber: 'POL-12345', status: 'submitted', type: 'auto_collision',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Rear bumper collision at intersection.', documents: [], photos: [], timeline: [], deductible: 500, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '2', claimNumber: 'CLA-0002', policyNumber: 'POL-55555', status: 'under_review', type: 'property_damage',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Storm damage to roof shingles.', documents: [], photos: [], timeline: [], deductible: 1000, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '3', claimNumber: 'CLA-0003', policyNumber: 'POL-77777', status: 'processing', type: 'theft',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Stolen catalytic converter.', documents: [], photos: [], timeline: [], deductible: 250, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '4', claimNumber: 'CLA-0004', policyNumber: 'POL-88888', status: 'approved', type: 'auto_comprehensive',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Windshield cracked by debris.', documents: [], photos: [], timeline: [], deductible: 200, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '5', claimNumber: 'CLA-0005', policyNumber: 'POL-99999', status: 'rejected', type: 'vandalism',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Graffiti on garage door.', documents: [], photos: [], timeline: [], deductible: 300, createdAt: new Date(), updatedAt: new Date()
+    }
+  ];
+
+  readonly displayedClaims = computed(() => {
+    const list = this.recentClaims();
+    return (Array.isArray(list) && list.length > 0) ? list : this.mockClaims;
+  });
+
   // Store selectors
   readonly recentClaims = this.store.selectSignal(selectRecentClaims);
   readonly claimsSummary = this.store.selectSignal(selectClaimsSummary);
@@ -220,14 +229,6 @@ export class DashboardComponent implements OnInit {
   // Responsive computed properties
   readonly containerClasses = computed(() => {
     return this.responsiveService.containerClass() + ' safe-area-top safe-area-bottom min-h-screen bg-gray-50 flex flex-col';
-  });
-
-  readonly statsRowClasses = computed(() => {
-    const base = 'gap-4 mx-auto';
-    if (this.responsiveService.isMobile()) {
-      return `flex flex-col ${base}`;
-    }
-    return `flex flex-row items-start justify-center ${base}`;
   });
 
   ngOnInit(): void {
@@ -239,6 +240,21 @@ export class DashboardComponent implements OnInit {
   }
 
   // UI Helper Methods
+  getClaimTypeLabel(type: string): string {
+    switch (type) {
+      case 'auto_collision': return 'Auto Collision';
+      case 'auto_comprehensive': return 'Auto Comprehensive';
+      case 'auto_liability': return 'Auto Liability';
+      case 'property_damage': return 'Property Damage';
+      case 'theft': return 'Theft';
+      case 'vandalism': return 'Vandalism';
+      case 'natural_disaster': return 'Natural Disaster';
+      case 'personal_injury': return 'Personal Injury';
+      case 'medical': return 'Medical';
+      default: return 'Claim';
+    }
+  }
+
   getClaimTypeIcon(type: string): string {
     switch (type) {
       case 'auto_collision': return 'car_crash';
