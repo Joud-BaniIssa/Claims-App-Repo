@@ -62,15 +62,22 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
               <mat-icon>dashboard</mat-icon>
               Dashboard
             </a>
-            <a 
-              routerLink="/claims" 
+            <a
+              routerLink="/claims"
               routerLinkActive="active-link"
               class="nav-link">
               <mat-icon>description</mat-icon>
               Claims
             </a>
-            <a 
-              routerLink="/profile" 
+            <a
+              routerLink="/workshop"
+              routerLinkActive="active-link"
+              class="nav-link">
+              <mat-icon>build</mat-icon>
+              Workshop
+            </a>
+            <a
+              routerLink="/profile"
               routerLinkActive="active-link"
               class="nav-link">
               <mat-icon>person</mat-icon>
