@@ -5,6 +5,7 @@ import { ClaimsNewComponent } from './features/claims/claims-new.component';
 import { ProfileComponent } from './features/profile/profile.component';
 import { WorkshopComponent } from './features/workshop/workshop.component';
 import { SettingsComponent } from './features/profile/settings.component';
+import { NotificationsComponent } from './features/notifications/notifications.component';
 
 export const routes: Routes = [
   {
