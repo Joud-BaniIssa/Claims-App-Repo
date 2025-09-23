@@ -22,15 +22,6 @@ import { MatIconModule } from '@angular/material/icon';
             <p class="text-gray-600">File and track your claims</p>
           </div>
         </div>
-        <div class="flex flex-col items-end space-y-2">
-          <button mat-stroked-button routerLink="/workshop">
-            <mat-icon>build</mat-icon>
-            <span class="ml-2">Workshop</span>
-          </button>
-          <button mat-raised-button color="warn" routerLink="/claims/new">
-            New Claim
-          </button>
-        </div>
       </div>
 
       <div class="grid grid-cols-1 gap-4">
