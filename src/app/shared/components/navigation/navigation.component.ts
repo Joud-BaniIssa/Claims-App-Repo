@@ -10,7 +10,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
 
 import { ResponsiveService } from '../../../core/services/responsive.service';
-import { EmergencyService } from '../../../core/services/emergency.service';
 
 @Component({
   selector: 'app-navigation',
@@ -46,12 +45,10 @@ import { EmergencyService } from '../../../core/services/emergency.service';
             <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
               <mat-icon class="text-primary-500">security</mat-icon>
             </div>
-            @if (!responsiveService.isMobile()) {
-              <div>
-                <h1 class="text-xl font-bold">InsuranceAI</h1>
-                <p class="text-xs opacity-80">Claims Platform</p>
-              </div>
-            }
+            <div>
+              <h1 class="text-xl font-bold">InsuranceAI</h1>
+              <p class="text-xs opacity-80">Claims Platform</p>
+            </div>
           </a>
         </div>
 
@@ -73,13 +70,6 @@ import { EmergencyService } from '../../../core/services/emergency.service';
               Claims
             </a>
             <a 
-              routerLink="/documents" 
-              routerLinkActive="active-link"
-              class="nav-link">
-              <mat-icon>folder</mat-icon>
-              Documents
-            </a>
-            <a 
               routerLink="/profile" 
               routerLinkActive="active-link"
               class="nav-link">
@@ -91,19 +81,6 @@ import { EmergencyService } from '../../../core/services/emergency.service';
 
         <!-- Actions -->
         <div class="flex items-center space-x-2">
-          <!-- Emergency Indicator -->
-          @if (emergencyService.isEmergencyMode()) {
-            <button 
-              mat-icon-button
-              [matBadge]="'!'"
-              matBadgeColor="warn"
-              matBadgeSize="small"
-              class="text-white animate-pulse"
-              (click)="showEmergencyDetails()">
-              <mat-icon>warning</mat-icon>
-            </button>
-          }
-
           <!-- Notifications -->
           <button 
             mat-icon-button
@@ -183,14 +160,6 @@ import { EmergencyService } from '../../../core/services/emergency.service';
                 Claims
               </a>
               <a 
-                routerLink="/documents" 
-                routerLinkActive="mobile-active-link"
-                class="mobile-nav-link"
-                (click)="closeMobileMenu()">
-                <mat-icon>folder</mat-icon>
-                Documents
-              </a>
-              <a 
                 routerLink="/profile" 
                 routerLinkActive="mobile-active-link"
                 class="mobile-nav-link"
@@ -199,23 +168,6 @@ import { EmergencyService } from '../../../core/services/emergency.service';
                 Profile
               </a>
             </nav>
-
-            <!-- Emergency Section -->
-            @if (emergencyService.isEmergencyMode()) {
-              <div class="mt-8 p-4 bg-red-50 border border-red-200 rounded-xl">
-                <div class="flex items-center space-x-2 mb-2">
-                  <mat-icon class="text-red-600">warning</mat-icon>
-                  <h3 class="font-semibold text-red-800">Emergency Active</h3>
-                </div>
-                <p class="text-sm text-red-700 mb-3">{{ emergencyService.activeEmergency()?.type | titlecase }}</p>
-                <button 
-                  mat-stroked-button
-                  class="w-full text-red-600 border-red-600"
-                  (click)="showEmergencyDetails(); closeMobileMenu()">
-                  View Details
-                </button>
-              </div>
-            }
           </div>
         </mat-sidenav>
         <mat-sidenav-content>
@@ -268,7 +220,6 @@ import { EmergencyService } from '../../../core/services/emergency.service';
 })
 export class NavigationComponent {
   protected responsiveService = inject(ResponsiveService);
-  protected emergencyService = inject(EmergencyService);
 
   // UI state
   private isMobileMenuOpenSignal = signal(false);
@@ -294,15 +245,8 @@ export class NavigationComponent {
     this.isMobileMenuOpenSignal.set(false);
   }
 
-  // Emergency methods
-  showEmergencyDetails(): void {
-    // This could open a dialog or navigate to emergency details
-    console.log('Show emergency details');
-  }
-
   // Auth methods
   logout(): void {
-    // Implement logout logic
     console.log('Logout user');
   }
 }
