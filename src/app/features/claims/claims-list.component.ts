@@ -27,9 +27,8 @@ import { MatIconModule } from '@angular/material/icon';
             <mat-icon>build</mat-icon>
             <span class="ml-2">Workshop</span>
           </button>
-          <button mat-raised-button color="warn" routerLink="/claims/new">
+          <button mat-raised-button color="warn" routerLink="/claims/new" class="min-w-12 sm:min-w-16 px-0 sm:px-4">
             <mat-icon>add</mat-icon>
-            <span class="ml-2">New Claim</span>
           </button>
         </div>
       </div>
