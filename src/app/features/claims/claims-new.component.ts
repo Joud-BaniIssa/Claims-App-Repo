@@ -27,8 +27,7 @@ import { ClaimInitiationForm } from '../../models/claims.model';
               <mat-icon>arrow_back</mat-icon>
             </button>
             <div>
-              <h1 class="text-3xl font-bold text-gray-900">File New Claim</h1>
-              <p class="text-gray-600">Simple, clean form</p>
+              <h1 class="page-title text-3xl font-bold text-gray-900">File New Claim</h1>
             </div>
           </div>
           <button mat-stroked-button (click)="saveDraft()">Save Draft</button>
@@ -99,6 +98,8 @@ import { ClaimInitiationForm } from '../../models/claims.model';
     .box { @apply bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm focus-within:border-primary-500 focus-within:ring-2 ring-primary-100; }
     .input { @apply w-full bg-transparent outline-none text-gray-900 placeholder-gray-400; }
     .error { @apply text-xs text-red-600 mt-1; }
+    .page-title { line-height: 36px; }
+    @media (max-width: 640px) { .page-title { font-size: 18px; line-height: 24px; } }
   `]
 })
 export class ClaimsNewComponent implements OnInit {
