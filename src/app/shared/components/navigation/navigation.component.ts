@@ -51,6 +51,7 @@ import { MatIconModule } from '@angular/material/icon';
       height: 64px;
       padding-bottom: env(safe-area-inset-bottom);
       box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+      border-top: none;
       z-index: 50;
     }
 
