@@ -37,6 +37,7 @@ import { ClaimInitiationForm } from '../../models/claims.model';
   ],
   template: `
     <div [class]="containerClasses()">
+      <div class="mx-auto max-w-screen-sm">
       <!-- Header -->
       <div class="mb-6 flex items-center gap-3">
         <button mat-icon-button routerLink="/dashboard" aria-label="Back">
@@ -115,6 +116,7 @@ import { ClaimInitiationForm } from '../../models/claims.model';
           </button>
         </div>
       </form>
+      </div>
     </div>
   `,
   styles: [`
@@ -130,6 +132,8 @@ import { ClaimInitiationForm } from '../../models/claims.model';
     /* Larger touch targets on mobile for minimal UI */
     @media (max-width: 640px) {
       :host ::ng-deep .mat-mdc-form-field-infix { padding-top: 14px; padding-bottom: 14px; }
+      :host ::ng-deep .rounded-inputs .mat-mdc-text-field-wrapper { background-color: #ffffff !important; }
+      :host ::ng-deep mat-form-field.mat-mdc-form-field { background-color: #ffffff !important; }
     }
   `]
 })
