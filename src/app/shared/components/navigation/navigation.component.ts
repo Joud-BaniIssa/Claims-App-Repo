@@ -120,7 +120,7 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
       </button>
     </mat-menu>
 
-    <!-- Mobile Navigation Drawer -->
+    <!-- Mobile Navigation Drawer (overlay, does not wrap content) -->
     @if (responsiveService.isMobile()) {
       <mat-sidenav-container class="mobile-nav-container">
         <mat-sidenav 
@@ -170,13 +170,11 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
             </nav>
           </div>
         </mat-sidenav>
-        <mat-sidenav-content>
-          <ng-content></ng-content>
-        </mat-sidenav-content>
       </mat-sidenav-container>
-    } @else {
-      <ng-content></ng-content>
     }
+
+    <!-- Always render projected content so mobile shows the page -->
+    <ng-content></ng-content>
   `,
   styles: [`
     .nav-link {
@@ -199,8 +197,11 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
       width: 280px;
     }
 
+    /* Sidenav container should not affect layout; it only hosts the overlay drawer */
     .mobile-nav-container {
-      height: calc(100vh - 64px);
+      height: 0;
+      width: 0;
+      overflow: visible;
     }
 
     mat-toolbar {
