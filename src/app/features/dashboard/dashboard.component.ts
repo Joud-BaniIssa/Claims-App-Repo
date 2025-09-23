@@ -272,6 +272,9 @@ export class DashboardComponent implements OnInit {
   }
 
   getStatusChipClass(status: string): string {
-    return 'bg-white text-black border border-primary-500';
+    const label = this.normalizeStatusLabel(status);
+    if (label === 'Approved') return 'bg-green-100 text-green-800 border border-green-200';
+    if (label === 'Denied') return 'bg-red-100 text-red-800 border border-red-200';
+    return 'bg-yellow-100 text-yellow-800 border border-yellow-200';
   }
 }
