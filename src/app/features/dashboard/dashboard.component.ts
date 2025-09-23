@@ -144,16 +144,6 @@ import { Claim } from '../../models/claims.model';
         }
       </div>
 
-      <!-- Floating Action Button for Mobile -->
-      @if (responsiveService.isMobile()) {
-        <button 
-          mat-fab
-          color="primary"
-          routerLink="/claims/new"
-          class="fixed bottom-6 right-6 z-10 shadow-lg">
-          <mat-icon>add</mat-icon>
-        </button>
-      }
     </div>
   `,
   styles: [`
