@@ -44,6 +44,11 @@ export const routes: Routes = [
     title: 'Settings - InsuranceAI'
   },
   {
+    path: 'notifications',
+    component: NotificationsComponent,
+    title: 'Notifications - InsuranceAI'
+  },
+  {
     path: '**',
     redirectTo: '/dashboard'
   }
