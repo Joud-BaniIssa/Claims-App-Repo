@@ -81,9 +81,9 @@ import {
         }
       </div>
 
-      <!-- Quick Stats Cards -->
-      <div [class]="statsGridClasses()" class="mb-8">
-        <div class="card">
+      <!-- Stats (simplified) -->
+      <div [class]="statsRowClasses()" class="mb-8">
+        <div class="card w-full flex-1">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm text-gray-600 mb-1">Total Claims</p>
@@ -95,7 +95,7 @@ import {
           </div>
         </div>
 
-        <div class="card">
+        <div class="card w-full flex-1">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm text-gray-600 mb-1">Pending</p>
@@ -106,78 +106,6 @@ import {
             </div>
           </div>
         </div>
-
-        <div class="card">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Total Damage</p>
-              <p class="text-2xl font-bold text-red-600">
-                {{ (claimsSummary()?.totalEstimatedDamage || 0) | currency }}
-              </p>
-            </div>
-            <div class="p-3 bg-red-100 rounded-xl">
-              <mat-icon class="text-red-600">attach_money</mat-icon>
-            </div>
-          </div>
-        </div>
-
-        @if (!responsiveService.isMobile()) {
-          <div class="card">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Avg. Processing</p>
-                <p class="text-2xl font-bold text-green-600">{{ claimsSummary()?.averageProcessingTime || 0 }} days</p>
-              </div>
-              <div class="p-3 bg-green-100 rounded-xl">
-                <mat-icon class="text-green-600">schedule</mat-icon>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
-
-      <!-- Primary Actions -->
-      <div [class]="actionsGridClasses()" class="mb-8">
-        <button 
-          mat-stroked-button
-          routerLink="/claims/new"
-          class="p-6 h-auto flex flex-col items-center space-y-3 hover:bg-gray-50 transition-colors">
-          <div class="p-4 bg-primary-100 rounded-full">
-            <mat-icon class="text-primary-600 text-2xl">add_circle</mat-icon>
-          </div>
-          <div class="text-center">
-            <h3 class="font-semibold text-gray-900">File New Claim</h3>
-            <p class="text-sm text-gray-600">Start a new insurance claim</p>
-          </div>
-        </button>
-
-        <button 
-          mat-stroked-button
-          routerLink="/claims"
-          class="p-6 h-auto flex flex-col items-center space-y-3 hover:bg-gray-50 transition-colors">
-          <div class="p-4 bg-blue-100 rounded-full">
-            <mat-icon class="text-blue-600 text-2xl">list</mat-icon>
-          </div>
-          <div class="text-center">
-            <h3 class="font-semibold text-gray-900">Track Your Claims</h3>
-            <p class="text-sm text-gray-600">View and manage existing claims</p>
-          </div>
-        </button>
-
-        @if (!responsiveService.isMobile()) {
-          <button 
-            mat-stroked-button
-            routerLink="/profile"
-            class="p-6 h-auto flex flex-col items-center space-y-3 hover:bg-gray-50 transition-colors">
-            <div class="p-4 bg-purple-100 rounded-full">
-              <mat-icon class="text-purple-600 text-2xl">person</mat-icon>
-            </div>
-            <div class="text-center">
-              <h3 class="font-semibold text-gray-900">Profile</h3>
-              <p class="text-sm text-gray-600">Manage your profile</p>
-            </div>
-          </button>
-        }
       </div>
 
       <!-- Recent Claims -->
@@ -291,33 +219,18 @@ export class DashboardComponent implements OnInit {
 
   // Responsive computed properties
   readonly containerClasses = computed(() => {
-    return this.responsiveService.containerClass() + ' safe-area-top safe-area-bottom min-h-screen bg-gray-50';
+    return this.responsiveService.containerClass() + ' safe-area-top safe-area-bottom min-h-screen bg-gray-50 flex flex-col';
   });
 
-  readonly statsGridClasses = computed(() => {
-    const base = 'grid gap-4';
+  readonly statsRowClasses = computed(() => {
+    const base = 'gap-4 mx-auto';
     if (this.responsiveService.isMobile()) {
-      return `${base} grid-cols-1 sm:grid-cols-2`;
+      return `flex flex-col ${base}`;
     }
-    if (this.responsiveService.isTablet()) {
-      return `${base} grid-cols-2 lg:grid-cols-3`;
-    }
-    return `${base} grid-cols-4`;
-  });
-
-  readonly actionsGridClasses = computed(() => {
-    const base = 'grid gap-4';
-    if (this.responsiveService.isMobile()) {
-      return `${base} grid-cols-2`;
-    }
-    if (this.responsiveService.isTablet()) {
-      return `${base} grid-cols-3`;
-    }
-    return `${base} grid-cols-3`;
+    return `flex flex-row items-start justify-center ${base}`;
   });
 
   ngOnInit(): void {
-    // Load initial claims data
     this.store.dispatch(ClaimsActions.loadClaims({}));
   }
 
