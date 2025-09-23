@@ -45,6 +45,11 @@ export const routes: Routes = [
     title: 'Settings - InsuranceAI'
   },
   {
+    path: 'documents',
+    component: DocumentsComponent,
+    title: 'Document Vault - InsuranceAI'
+  },
+  {
     path: 'notifications',
     component: NotificationsComponent,
     title: 'Notifications - InsuranceAI'
