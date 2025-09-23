@@ -33,6 +33,16 @@ export const routes: Routes = [
     title: 'Profile - InsuranceAI'
   },
   {
+    path: 'workshop',
+    component: WorkshopComponent,
+    title: 'Workshop - InsuranceAI'
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+    title: 'Settings - InsuranceAI'
+  },
+  {
     path: '**',
     redirectTo: '/dashboard'
   }
