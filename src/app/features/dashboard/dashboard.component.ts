@@ -53,8 +53,8 @@ import { Claim } from '../../models/claims.model';
               <div class="flex items-center space-x-2">
                 <button
                   mat-stroked-button
-                  [routerLink]="['/claims/new']"
-                  [queryParams]="{ workshop: true }">
+                  routerLink="/workshop"
+                  >
                   <mat-icon>build</mat-icon>
                   Workshop
                 </button>
@@ -91,8 +91,8 @@ import { Claim } from '../../models/claims.model';
             </div>
             <button
               mat-stroked-button
-              [routerLink]="['/claims/new']"
-              [queryParams]="{ workshop: true }"
+              routerLink="/workshop"
+              
               class="w-full">
               <mat-icon>build</mat-icon>
               Workshop
