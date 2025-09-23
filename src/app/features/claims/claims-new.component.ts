@@ -38,94 +38,99 @@ import { ClaimInitiationForm } from '../../models/claims.model';
   template: `
     <div [class]="containerClasses()">
       <!-- Header -->
-      <div class="mb-4">
-        <div class="flex items-center space-x-3">
-          <button mat-icon-button routerLink="/dashboard" aria-label="Back">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
+      <div class="mb-6 flex items-center gap-3">
+        <button mat-icon-button routerLink="/dashboard" aria-label="Back">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1 class="text-2xl font-semibold text-gray-900">New Claim</h1>
+      </div>
+
+      <!-- Minimal Form -->
+      <form [formGroup]="form" class="rounded-inputs space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Date -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Date of Incident</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="incidentDate" [max]="maxDate" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.get('incidentDate')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+          <!-- Time -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Time of Incident</mat-label>
+            <input matInput type="time" formControlName="incidentTime" required>
+            <mat-error *ngIf="form.get('incidentTime')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Police report number -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Police Report Number (optional)</mat-label>
+          <input matInput formControlName="policeReportNumber" placeholder="e.g. PRN-12345" />
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4" maxlength="500" placeholder="Describe what happened..." required></textarea>
+          <mat-hint align="end">{{ form.get('description')?.value?.length || 0 }}/500</mat-hint>
+          <mat-error *ngIf="form.get('description')?.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="form.get('description')?.hasError('minlength')">Min 20 characters</mat-error>
+        </mat-form-field>
+
+        <!-- Uploads -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">New Claim</h1>
-            <p class="text-gray-600">Minimal, fast submission</p>
+            <label class="block text-sm font-medium text-gray-800 mb-2">Photos</label>
+            <input type="file" accept="image/*" multiple (change)="onPhotosSelected($event)" class="hidden" #photoInput>
+            <button mat-stroked-button (click)="photoInput.click()" class="rounded-xl">
+              <mat-icon>photo_camera</mat-icon>
+              <span class="ml-2">Select Photos</span>
+            </button>
+            <ul class="mt-2 text-sm text-gray-600 list-disc list-inside" *ngIf="selectedPhotos.length">
+              <li *ngFor="let f of selectedPhotos">{{ f.name }}</li>
+            </ul>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-800 mb-2">Documents</label>
+            <input type="file" multiple (change)="onDocsSelected($event)" class="hidden" #docInput>
+            <button mat-stroked-button (click)="docInput.click()" class="rounded-xl">
+              <mat-icon>upload_file</mat-icon>
+              <span class="ml-2">Select Documents</span>
+            </button>
+            <ul class="mt-2 text-sm text-gray-600 list-disc list-inside" *ngIf="selectedDocs.length">
+              <li *ngFor="let f of selectedDocs">{{ f.name }}</li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      <!-- Minimalist Form Card (white boxes, red buttons) -->
-      <div class="card">
-        <form [formGroup]="form" class="space-y-5">
-          <!-- Date & Time -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Date of Incident</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="incidentDate" [max]="maxDate" required>
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-              <mat-error *ngIf="form.get('incidentDate')?.hasError('required')">Required</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Time of Incident</mat-label>
-              <input matInput type="time" formControlName="incidentTime" required>
-              <mat-error *ngIf="form.get('incidentTime')?.hasError('required')">Required</mat-error>
-            </mat-form-field>
-          </div>
-
-          <!-- Police report number -->
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Police Report Number (optional)</mat-label>
-            <input matInput formControlName="policeReportNumber" placeholder="e.g. PRN-12345" />
-          </mat-form-field>
-
-          <!-- Description -->
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description" rows="4" maxlength="500" placeholder="Describe what happened..." required></textarea>
-            <mat-hint align="end">{{ form.get('description')?.value?.length || 0 }}/500</mat-hint>
-            <mat-error *ngIf="form.get('description')?.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="form.get('description')?.hasError('minlength')">Min 20 characters</mat-error>
-          </mat-form-field>
-
-          <!-- Uploads -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Upload Photos</label>
-              <input type="file" accept="image/*" multiple (change)="onPhotosSelected($event)" class="hidden" #photoInput>
-              <button mat-stroked-button (click)="photoInput.click()">
-                <mat-icon>photo_camera</mat-icon>
-                Select Photos
-              </button>
-              <ul class="mt-2 text-sm text-gray-600 list-disc list-inside" *ngIf="selectedPhotos.length">
-                <li *ngFor="let f of selectedPhotos">{{ f.name }}</li>
-              </ul>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Upload Documents</label>
-              <input type="file" multiple (change)="onDocsSelected($event)" class="hidden" #docInput>
-              <button mat-stroked-button (click)="docInput.click()">
-                <mat-icon>upload_file</mat-icon>
-                Select Documents
-              </button>
-              <ul class="mt-2 text-sm text-gray-600 list-disc list-inside" *ngIf="selectedDocs.length">
-                <li *ngFor="let f of selectedDocs">{{ f.name }}</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="flex items-center justify-between pt-2">
-            <button mat-stroked-button type="button" (click)="saveDraft()">Save Draft</button>
-            <button mat-raised-button color="warn" type="button" (click)="submitClaim()" [disabled]="form.invalid || isSubmitting()">
-              {{ isSubmitting() ? 'Submitting...' : 'Submit Claim' }}
-            </button>
-          </div>
-        </form>
-      </div>
+        <!-- Actions -->
+        <div class="flex items-center justify-between pt-2">
+          <button mat-stroked-button type="button" (click)="saveDraft()" class="rounded-xl">Save Draft</button>
+          <button mat-raised-button color="warn" type="button" (click)="submitClaim()" [disabled]="form.invalid || isSubmitting()" class="rounded-xl">
+            {{ isSubmitting() ? 'Submitting...' : 'Submit Claim' }}
+          </button>
+        </div>
+      </form>
     </div>
   `,
   styles: [`
-    .mat-form-field { width: 100%; }
-    @media (max-width: 640px) { .card { margin-left: -1rem; margin-right: -1rem; border-left: none; border-right: none; border-radius: 0; } }
+    :host { display: block; }
+    /* Page background: white primary, subtle spacing */
+    :host ::ng-deep .rounded-inputs .mat-mdc-text-field-wrapper {
+      border-radius: 1rem !important; /* fully rounded corners */
+    }
+    :host ::ng-deep .rounded-inputs .mdc-notched-outline__leading,
+    :host ::ng-deep .rounded-inputs .mdc-notched-outline__trailing {
+      border-radius: 1rem !important;
+    }
+    /* Larger touch targets on mobile for minimal UI */
+    @media (max-width: 640px) {
+      :host ::ng-deep .mat-mdc-form-field-infix { padding-top: 14px; padding-bottom: 14px; }
+    }
   `]
 })
 export class ClaimsNewComponent implements OnInit {
@@ -149,9 +154,7 @@ export class ClaimsNewComponent implements OnInit {
   selectedPhotos: File[] = [];
   selectedDocs: File[] = [];
 
-  readonly containerClasses = computed(() => {
-    return this.responsiveService.containerClass() + ' py-6 min-h-screen bg-gray-50';
-  });
+  readonly containerClasses = computed(() => this.responsiveService.containerClass() + ' py-6 min-h-screen bg-white');
 
   ngOnInit(): void {
     this.store.dispatch(ClaimsActions.loadDraft());
@@ -198,6 +201,6 @@ export class ClaimsNewComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['/dashboard']);
       this.snackBar.open('Claim submitted. You can add photos/documents in claim details.', 'Close', { duration: 5000 });
-    }, 1500);
+    }, 1200);
   }
 }
