@@ -80,10 +80,6 @@ import { MatIconModule } from '@angular/material/icon';
               <span class="px-3 py-1 rounded-lg status-rejected text-sm">Denied</span>
             </li>
           </ul>
-          <div class="mt-4 flex items-center justify-between">
-            <a routerLink="/workshop" class="text-primary-700 hover:underline">View workshop updates</a>
-            <button mat-stroked-button routerLink="/claims/new">Add Documents</button>
-          </div>
         </div>
       </div>
     </div>
