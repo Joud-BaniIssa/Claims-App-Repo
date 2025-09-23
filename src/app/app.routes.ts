@@ -3,6 +3,8 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { ClaimsListComponent } from './features/claims/claims-list.component';
 import { ClaimsNewComponent } from './features/claims/claims-new.component';
 import { ProfileComponent } from './features/profile/profile.component';
+import { WorkshopComponent } from './features/workshop/workshop.component';
+import { SettingsComponent } from './features/profile/settings.component';
 
 export const routes: Routes = [
   {
