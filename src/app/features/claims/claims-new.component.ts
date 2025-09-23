@@ -609,6 +609,9 @@ export class ClaimsNewComponent implements OnInit {
         description: this.incidentForm.value.description,
         policeReportFiled: this.additionalForm.value.policeReportFiled,
         policeReportNumber: this.additionalForm.value.policeReportNumber,
+        policeReportFiled: this.additionalForm.value.policeReportFiled,
+        policeReportNumber: this.additionalForm.value.policeReportNumber,
+        emergencyServices: false,
         injuries: this.additionalForm.value.injuries,
         injuryDescription: this.additionalForm.value.injuryDescription,
         otherVehiclesInvolved: this.additionalForm.value.otherVehiclesInvolved
