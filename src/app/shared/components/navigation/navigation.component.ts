@@ -89,13 +89,15 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
         <!-- Actions -->
         <div class="flex items-center space-x-2">
           <!-- Notifications -->
-          <button 
+          <button
             mat-icon-button
             [matBadge]="notificationCount()"
             [matBadgeHidden]="notificationCount() === 0"
             matBadgeColor="accent"
             matBadgeSize="small"
-            class="text-white">
+            class="text-white"
+            routerLink="/notifications"
+            aria-label="Notifications">
             <mat-icon>notifications</mat-icon>
           </button>
 
