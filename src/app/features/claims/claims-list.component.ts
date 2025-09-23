@@ -22,13 +22,13 @@ import { MatIconModule } from '@angular/material/icon';
             <p class="text-gray-600">File and track your claims</p>
           </div>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-col items-end space-y-2">
           <button mat-stroked-button routerLink="/workshop">
             <mat-icon>build</mat-icon>
             <span class="ml-2">Workshop</span>
           </button>
-          <button mat-raised-button color="warn" routerLink="/claims/new" class="p-0 h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center rounded-xl">
-            <mat-icon class="m-0">add</mat-icon>
+          <button mat-raised-button color="warn" routerLink="/claims/new">
+            New Claim
           </button>
         </div>
       </div>
