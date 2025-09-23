@@ -44,9 +44,9 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
                 Later
               }
             </button>
-            <button 
-              mat-raised-button 
-              color="primary"
+            <button
+              mat-raised-button
+              color="warn"
               (click)="installApp()">
               Install
             </button>
@@ -57,7 +57,7 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
 
     <!-- Update Available Banner -->
     @if (showUpdateBanner()) {
-      <div class="fixed top-0 left-0 right-0 z-50 bg-blue-600 text-white p-4 animate-slide-up">
+      <div class="fixed top-0 left-0 right-0 z-50 bg-primary-600 text-white p-4 animate-slide-up">
         <div class="flex items-center justify-between max-w-screen-lg mx-auto">
           <div class="flex items-center space-x-3">
             <mat-icon>system_update</mat-icon>
@@ -71,13 +71,13 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
             <button 
               mat-stroked-button
               (click)="dismissUpdateBanner()"
-              class="text-white border-white hover:bg-white hover:text-blue-600">
+              class="text-white border-white hover:bg-white hover:text-primary-600">
               Later
             </button>
             <button 
               mat-raised-button
               (click)="applyUpdate()"
-              class="bg-white text-blue-600 hover:bg-gray-100">
+              class="bg-white text-primary-600 hover:bg-gray-100">
               Update Now
             </button>
           </div>
@@ -120,9 +120,9 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
           </div>
           
           @if (pwaService.isInstallable()) {
-            <button 
-              mat-raised-button 
-              color="primary"
+            <button
+              mat-raised-button
+              color="warn"
               (click)="installApp()"
               class="mb-2">
               <mat-icon>get_app</mat-icon>
