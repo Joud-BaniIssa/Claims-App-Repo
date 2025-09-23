@@ -13,11 +13,11 @@ import { MatIconModule } from '@angular/material/icon';
     <div class="container-mobile p-6">
       <!-- Header -->
       <div class="mb-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 mx-auto sm:mx-0">
           <button mat-icon-button routerLink="/dashboard" aria-label="Back">
             <mat-icon>arrow_back</mat-icon>
           </button>
-          <div>
+          <div class="mr-5 sm:mr-0">
             <h1 class="text-2xl font-bold text-gray-900">Claims</h1>
             <p class="text-gray-600">File and track your claims</p>
           </div>
