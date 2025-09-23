@@ -434,7 +434,7 @@ export class ClaimsNewComponent implements OnInit {
       incidentDate: this.form.value.incidentDate,
       incidentTime: this.form.value.incidentTime,
       location: { country: 'US' },
-      claimType: 'motor',
+      claimType: 'auto_collision',
       description: this.form.value.description,
       policeReportFiled: !!this.form.value.policeReportNumber,
       policeReportNumber: this.form.value.policeReportNumber,
