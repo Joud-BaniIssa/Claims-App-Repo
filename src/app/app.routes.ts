@@ -6,6 +6,7 @@ import { ProfileComponent } from './features/profile/profile.component';
 import { WorkshopComponent } from './features/workshop/workshop.component';
 import { SettingsComponent } from './features/profile/settings.component';
 import { NotificationsComponent } from './features/notifications/notifications.component';
+import { DocumentsComponent } from './features/documents/documents.component';
 
 export const routes: Routes = [
   {
