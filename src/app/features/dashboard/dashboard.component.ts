@@ -132,11 +132,10 @@ import { Claim } from '../../models/claims.model';
                       <p class="text-sm text-gray-600">{{ getClaimTypeLabel(claim.type) }}</p>
                     </div>
                   </div>
-                  <mat-chip
-                    [class]="getStatusChipClass(claim.status)"
-                    class="text-xs font-medium">
+                  <span
+                    [class]="getStatusChipClass(claim.status) + ' inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border'">
                     {{ normalizeStatusLabel(claim.status) }}
-                  </mat-chip>
+                  </span>
                 </div>
               </div>
             }
