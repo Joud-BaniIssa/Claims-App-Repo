@@ -1,0 +1,47 @@
+{
+  "name": "InsuranceAI Claims Platform",
+  "short_name": "InsuranceAI",
+  "description": "AI-powered insurance claims platform with emergency assistance",
+  "theme_color": "#e53935",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48 72x72 96x96 144x144 192x192 256x256",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "File New Claim",
+      "short_name": "New Claim",
+      "description": "Start a new insurance claim",
+      "url": "/claims/new",
+      "icons": []
+    },
+    {
+      "name": "Emergency",
+      "short_name": "Emergency",
+      "description": "Access emergency services",
+      "url": "/dashboard#emergency",
+      "icons": []
+    },
+    {
+      "name": "View Claims",
+      "short_name": "Claims",
+      "description": "View all your claims",
+      "url": "/claims",
+      "icons": []
+    }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "lang": "en-US",
+  "dir": "ltr"
+}
