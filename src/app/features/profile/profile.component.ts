@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
         <mat-icon class="text-6xl text-gray-300 mb-4">person</mat-icon>
         <h2 class="text-2xl font-bold text-gray-900 mb-2">Profile Management</h2>
         <p class="text-gray-600 mb-6">This page will allow you to manage your personal information, insurance policies, and preferences.</p>
-        <button mat-raised-button color="primary" routerLink="/dashboard">
+        <button mat-raised-button color="warn" routerLink="/dashboard">
           Back to Dashboard
         </button>
       </div>
