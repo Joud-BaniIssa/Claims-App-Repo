@@ -70,7 +70,7 @@ import { MatDividerModule } from '@angular/material/divider';
     .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
     .content { flex: 1 1 auto; }
 
-    .topbar { position: sticky; top: 0; z-index: 60; background: #fff; color: #212121; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 0 16px; }
+    .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #fff; color: #212121; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 0 16px; }
     .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
     .logo { width: 32px; height: 32px; border-radius: 8px; background: #fff; display:flex; align-items:center; justify-content:center; border:1px solid #eee; }
     .brand-text .title { font-weight: 700; line-height: 1; }
