@@ -45,7 +45,7 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
             <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
               <mat-icon class="text-primary-500">security</mat-icon>
             </div>
-            <div>
+            <div class="text-black sm:text-white">
               <h1 class="text-xl font-bold">InsuranceAI</h1>
               <p class="text-xs opacity-80">Claims Platform</p>
             </div>
