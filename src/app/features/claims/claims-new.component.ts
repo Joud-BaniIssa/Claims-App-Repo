@@ -21,7 +21,6 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 
 import { ResponsiveService } from '../../core/services/responsive.service';
-import { EmergencyService } from '../../core/services/emergency.service';
 import * as ClaimsActions from '../../store/claims/claims.actions';
 import { selectClaimsSubmitting, selectClaimsError } from '../../store/claims/claims.selectors';
 import { ClaimType, ClaimInitiationForm } from '../../models/claims.model';
@@ -61,7 +60,7 @@ import { ClaimType, ClaimInitiationForm } from '../../models/claims.model';
           </button>
           <div>
             <h1 class="text-2xl font-bold text-gray-900">File New Claim</h1>
-            <p class="text-gray-600">AI-powered claim processing with guided assistance</p>
+            <p class="text-gray-600">Guided claim processing</p>
           </div>
         </div>
 
@@ -289,10 +288,6 @@ import { ClaimType, ClaimInitiationForm } from '../../models/claims.model';
                       placeholder="Enter report number if available">
                   </mat-form-field>
                 }
-
-                <mat-checkbox formControlName="emergencyServices">
-                  Emergency services were called
-                </mat-checkbox>
               </div>
 
               <mat-divider></mat-divider>
@@ -397,18 +392,6 @@ import { ClaimType, ClaimInitiationForm } from '../../models/claims.model';
                 <p class="text-sm text-gray-700">{{ incidentForm.get('description')?.value }}</p>
               </div>
 
-              <!-- Emergency Priority Option -->
-              <div class="p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                <mat-checkbox 
-                  formControlName="emergencyPriority"
-                  class="mb-2">
-                  <span class="font-semibold text-orange-800">Mark as Emergency Priority</span>
-                </mat-checkbox>
-                <p class="text-sm text-orange-700 ml-6">
-                  Emergency claims receive immediate attention and expedited processing.
-                </p>
-              </div>
-
               <!-- Action Buttons -->
               <div class="flex justify-between">
                 <button 
@@ -469,7 +452,6 @@ export class ClaimsNewComponent implements OnInit {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   protected responsiveService = inject(ResponsiveService);
-  private emergencyService = inject(EmergencyService);
 
   // Form groups
   incidentForm: FormGroup = this.fb.group({});
@@ -533,7 +515,6 @@ export class ClaimsNewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Load any saved draft
     this.store.dispatch(ClaimsActions.loadDraft());
   }
 
@@ -555,19 +536,15 @@ export class ClaimsNewComponent implements OnInit {
     this.additionalForm = this.fb.group({
       policeReportFiled: [false],
       policeReportNumber: [''],
-      emergencyServices: [false],
       injuries: [false],
       injuryDescription: [''],
-      otherVehiclesInvolved: [false],
-      emergencyPriority: [false]
+      otherVehiclesInvolved: [false]
     });
 
-    // Auto-save form changes as draft
     this.setupAutoSave();
   }
 
   private setupAutoSave(): void {
-    // Combine all form value changes and debounce
     const allChanges$ = [
       this.incidentForm.valueChanges,
       this.locationForm.valueChanges,
@@ -585,7 +562,7 @@ export class ClaimsNewComponent implements OnInit {
     this.gettingLocationSignal.set(true);
     
     try {
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+      await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
           timeout: 10000,
@@ -593,8 +570,6 @@ export class ClaimsNewComponent implements OnInit {
         });
       });
 
-      // Use reverse geocoding (in a real app, you'd use a service like Google Maps API)
-      // For now, we'll just show coordinates
       this.snackBar.open('Location obtained. Please fill in the address details.', 'Close', {
         duration: 3000
       });
@@ -634,7 +609,6 @@ export class ClaimsNewComponent implements OnInit {
         description: this.incidentForm.value.description,
         policeReportFiled: this.additionalForm.value.policeReportFiled,
         policeReportNumber: this.additionalForm.value.policeReportNumber,
-        emergencyServices: this.additionalForm.value.emergencyServices,
         injuries: this.additionalForm.value.injuries,
         injuryDescription: this.additionalForm.value.injuryDescription,
         otherVehiclesInvolved: this.additionalForm.value.otherVehiclesInvolved
@@ -642,13 +616,6 @@ export class ClaimsNewComponent implements OnInit {
 
       this.store.dispatch(ClaimsActions.createClaim({ claimData }));
 
-      // If marked as emergency, trigger emergency service
-      if (this.additionalForm.value.emergencyPriority) {
-        this.emergencyService.triggerUrgentClaim();
-      }
-
-      // Navigate to dashboard after successful submission
-      // In a real app, you'd listen to the success action
       setTimeout(() => {
         this.router.navigate(['/dashboard']);
         this.snackBar.open('Claim submitted successfully!', 'Close', {
