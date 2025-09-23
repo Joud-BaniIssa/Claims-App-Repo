@@ -158,8 +158,8 @@ import { ClaimType, ClaimInitiationForm } from '../../models/claims.model';
                   Save Draft
                 </button>
                 <button 
-                  mat-raised-button 
-                  color="primary"
+                  mat-raised-button
+                  color="warn"
                   matStepperNext
                   [disabled]="incidentForm.invalid">
                   Next: Location
@@ -257,8 +257,8 @@ import { ClaimType, ClaimInitiationForm } from '../../models/claims.model';
                     Save Draft
                   </button>
                   <button 
-                    mat-raised-button 
-                    color="primary"
+                    mat-raised-button
+                  color="warn"
                     matStepperNext
                     [disabled]="locationForm.invalid">
                     Next: Additional Info
@@ -348,8 +348,8 @@ import { ClaimType, ClaimInitiationForm } from '../../models/claims.model';
                     Save Draft
                   </button>
                   <button 
-                    mat-raised-button 
-                    color="primary"
+                    mat-raised-button
+                  color="warn"
                     matStepperNext
                     [disabled]="additionalForm.invalid">
                     Review & Submit
@@ -408,8 +408,8 @@ import { ClaimType, ClaimInitiationForm } from '../../models/claims.model';
                     Save Draft
                   </button>
                   <button 
-                    mat-raised-button 
-                    color="primary"
+                    mat-raised-button
+                  color="warn"
                     (click)="submitClaim()"
                     [disabled]="isSubmitting()">
                     {{ isSubmitting() ? 'Submitting...' : 'Submit Claim' }}

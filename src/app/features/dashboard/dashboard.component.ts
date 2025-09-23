@@ -44,7 +44,7 @@ import { Claim } from '../../models/claims.model';
             <div class="flex flex-col items-end space-y-2">
               <button
                 mat-raised-button
-                color="primary"
+                color="warn"
                 routerLink="/claims/new"
                 class="btn-primary">
                 <mat-icon>add</mat-icon>
@@ -75,7 +75,7 @@ import { Claim } from '../../models/claims.model';
             <div class="flex space-x-3">
               <button
                 mat-raised-button
-                color="primary"
+                color="warn"
                 routerLink="/claims/new"
                 class="flex-1 btn-primary">
                 <mat-icon>add</mat-icon>
