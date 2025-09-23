@@ -158,16 +158,24 @@ import { ResponsiveService } from '../../../core/services/responsive.service';
                 <mat-icon>dashboard</mat-icon>
                 Dashboard
               </a>
-              <a 
-                routerLink="/claims" 
+              <a
+                routerLink="/claims"
                 routerLinkActive="mobile-active-link"
                 class="mobile-nav-link"
                 (click)="closeMobileMenu()">
                 <mat-icon>description</mat-icon>
                 Claims
               </a>
-              <a 
-                routerLink="/profile" 
+              <a
+                routerLink="/workshop"
+                routerLinkActive="mobile-active-link"
+                class="mobile-nav-link"
+                (click)="closeMobileMenu()">
+                <mat-icon>build</mat-icon>
+                Workshop
+              </a>
+              <a
+                routerLink="/profile"
                 routerLinkActive="mobile-active-link"
                 class="mobile-nav-link"
                 (click)="closeMobileMenu()">
