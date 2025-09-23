@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -9,14 +9,12 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
 
-import { EmergencyWidgetComponent } from '../../shared/components/emergency-widget/emergency-widget.component';
 import { ResponsiveService } from '../../core/services/responsive.service';
 import * as ClaimsActions from '../../store/claims/claims.actions';
 import { 
   selectRecentClaims, 
   selectClaimsSummary, 
-  selectClaimsLoading,
-  selectPendingClaims 
+  selectClaimsLoading
 } from '../../store/claims/claims.selectors';
 
 @Component({
@@ -30,8 +28,7 @@ import {
     MatCardModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatRippleModule,
-    EmergencyWidgetComponent
+    MatRippleModule
   ],
   template: `
     <div [class]="containerClasses()">
@@ -40,7 +37,7 @@ import {
         <div class="flex items-center justify-between mb-4">
           <div>
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Insurance Claims Dashboard</h1>
-            <p class="text-gray-600">Manage your insurance claims with AI-powered assistance</p>
+            <p class="text-gray-600">Quickly file new claims and track existing ones</p>
           </div>
           @if (!responsiveService.isMobile()) {
             <div class="flex space-x-3">
@@ -82,11 +79,6 @@ import {
             </button>
           </div>
         }
-      </div>
-
-      <!-- Emergency Widget -->
-      <div class="mb-8">
-        <app-emergency-widget />
       </div>
 
       <!-- Quick Stats Cards -->
@@ -144,7 +136,7 @@ import {
         }
       </div>
 
-      <!-- Quick Actions -->
+      <!-- Primary Actions -->
       <div [class]="actionsGridClasses()" class="mb-8">
         <button 
           mat-stroked-button
@@ -167,21 +159,8 @@ import {
             <mat-icon class="text-blue-600 text-2xl">list</mat-icon>
           </div>
           <div class="text-center">
-            <h3 class="font-semibold text-gray-900">View All Claims</h3>
-            <p class="text-sm text-gray-600">Manage existing claims</p>
-          </div>
-        </button>
-
-        <button 
-          mat-stroked-button
-          routerLink="/documents"
-          class="p-6 h-auto flex flex-col items-center space-y-3 hover:bg-gray-50 transition-colors">
-          <div class="p-4 bg-green-100 rounded-full">
-            <mat-icon class="text-green-600 text-2xl">folder</mat-icon>
-          </div>
-          <div class="text-center">
-            <h3 class="font-semibold text-gray-900">Document Vault</h3>
-            <p class="text-sm text-gray-600">Upload and manage documents</p>
+            <h3 class="font-semibold text-gray-900">Track Your Claims</h3>
+            <p class="text-sm text-gray-600">View and manage existing claims</p>
           </div>
         </button>
 
@@ -256,13 +235,6 @@ import {
                   <span>{{ claim.dateReported | date:'mediumDate' }}</span>
                   <span>{{ claim.estimatedDamage | currency }}</span>
                 </div>
-                
-                @if (claim.emergencyFlag) {
-                  <div class="mt-2 flex items-center space-x-1 text-red-600">
-                    <mat-icon class="text-sm">priority_high</mat-icon>
-                    <span class="text-xs font-medium">Emergency Priority</span>
-                  </div>
-                }
               </div>
             }
           </div>
@@ -341,7 +313,7 @@ export class DashboardComponent implements OnInit {
     if (this.responsiveService.isTablet()) {
       return `${base} grid-cols-3`;
     }
-    return `${base} grid-cols-4`;
+    return `${base} grid-cols-3`;
   });
 
   ngOnInit(): void {
