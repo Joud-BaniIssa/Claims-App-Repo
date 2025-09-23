@@ -14,7 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
       </div>
 
       <!-- Fixed Bottom Navigation -->
-      <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom">
+      <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-white safe-area-bottom">
         <a
           routerLink="/dashboard"
           routerLinkActive="active"
