@@ -105,7 +105,7 @@ import { Claim } from '../../models/claims.model';
       <!-- Recent Claims -->
       <div class="card">
         <div class="flex items-center justify-between mb-6">
-          <h2 class="text-xl font-bold text-gray-900">Recent Claims</h2>
+          <h2 class="text-xl font-bold text-gray-900">Track Claims</h2>
           <button 
             mat-button 
             routerLink="/claims"
@@ -135,7 +135,7 @@ import { Claim } from '../../models/claims.model';
                   <mat-chip
                     [class]="getStatusChipClass(claim.status)"
                     class="text-xs font-medium">
-                    {{ claim.status | titlecase }}
+                    {{ normalizeStatusLabel(claim.status) }}
                   </mat-chip>
                 </div>
               </div>
@@ -240,6 +240,13 @@ export class DashboardComponent implements OnInit {
   }
 
   // UI Helper Methods
+  normalizeStatusLabel(status: string): 'Approved' | 'Pending' | 'Denied' {
+    const s = (status || '').toLowerCase();
+    if (s === 'approved' || s === 'partially_approved') return 'Approved';
+    if (s === 'rejected' || s === 'denied') return 'Denied';
+    return 'Pending';
+  }
+
   getClaimTypeLabel(type: string): string {
     switch (type) {
       case 'auto_collision': return 'Auto Collision';
@@ -271,36 +278,10 @@ export class DashboardComponent implements OnInit {
   }
 
   getClaimTypeIconClass(type: string): string {
-    const base = 'text-white';
-    switch (type) {
-      case 'auto_collision': return `${base} bg-red-500`;
-      case 'auto_comprehensive': return `${base} bg-blue-500`;
-      case 'auto_liability': return `${base} bg-purple-500`;
-      case 'property_damage': return `${base} bg-green-500`;
-      case 'theft': return `${base} bg-orange-500`;
-      case 'vandalism': return `${base} bg-yellow-500`;
-      case 'natural_disaster': return `${base} bg-indigo-500`;
-      case 'personal_injury': return `${base} bg-pink-500`;
-      case 'medical': return `${base} bg-teal-500`;
-      default: return `${base} bg-gray-500`;
-    }
+    return 'text-white bg-primary-500';
   }
 
   getStatusChipClass(status: string): string {
-    switch (status) {
-      case 'submitted':
-      case 'under_review':
-        return 'status-new';
-      case 'investigating':
-      case 'processing':
-        return 'status-processing';
-      case 'approved':
-      case 'partially_approved':
-        return 'status-approved';
-      case 'rejected':
-        return 'status-rejected';
-      default:
-        return 'bg-gray-100 text-gray-800 border border-gray-200';
-    }
+    return 'bg-white text-black border border-primary-500';
   }
 }
