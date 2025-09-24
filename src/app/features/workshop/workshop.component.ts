@@ -90,14 +90,10 @@ import { ResponsiveService } from '../../core/services/responsive.service';
         </div>
 
         <!-- Actions -->
-        <div class="flex items-center justify-between">
-          <button mat-stroked-button routerLink="/claims">
-            <mat-icon>assignment</mat-icon>
-            <span class="ml-2">Back to Claims</span>
-          </button>
+        <div class="flex items-center justify-end">
           <button mat-raised-button color="warn">
             <mat-icon>directions_car</mat-icon>
-            <span class="ml-2">Mark Ready for Pickup</span>
+            <span class="ml-2">Request Car Delivery</span>
           </button>
         </div>
       </div>
