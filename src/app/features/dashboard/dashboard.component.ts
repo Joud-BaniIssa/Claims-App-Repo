@@ -143,7 +143,7 @@ import { Claim } from '../../models/claims.model';
         }
       </div>
 
-      <div class="card mt-4">
+      <div class="card mt-4 help-card">
         <h2 class="text-xl font-bold text-gray-900 mb-2">Help & Guidance</h2>
         <ul class="list-disc list-inside text-gray-700 space-y-1">
           <li>Make sure everyone is safe and call emergency services if needed.</li>
@@ -177,6 +177,14 @@ import { Claim } from '../../models/claims.model';
         border-radius: 0;
         border-left: none;
         border-right: none;
+      }
+      /* Keep rounded edges for Help & Guidance */
+      .help-card {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 1rem !important;
+        border-left: 1px solid rgba(229, 231, 235, 1) !important; /* gray-200 */
+        border-right: 1px solid rgba(229, 231, 235, 1) !important;
       }
     }
   `]
