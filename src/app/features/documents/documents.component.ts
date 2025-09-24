@@ -15,9 +15,12 @@ import { ResponsiveService } from '../../core/services/responsive.service';
     <div [class]="containerClasses()">
       <div class="mx-auto w-full max-w-screen-sm">
         <!-- Header -->
-        <div class="mb-6">
-          <h1 class="text-2xl font-bold text-gray-900">Documents Vault</h1>
-          <p class="text-gray-600">Securely store and access your important documents</p>
+        <div class="mb-6 flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Documents Vault</h1>
+            <p class="text-gray-600">Securely store and access your important documents</p>
+          </div>
+          <button mat-stroked-button class="rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200">Gallery</button>
         </div>
 
         <!-- Upload Dropzone -->
