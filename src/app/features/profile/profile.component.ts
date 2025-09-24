@@ -74,8 +74,7 @@ import { ResponsiveService } from '../../core/services/responsive.service';
               <input class="form-input" formControlName="zip" placeholder="12345" />
             </div>
 
-            <div class="pt-2 flex items-center justify-between">
-              <button mat-stroked-button routerLink="/dashboard">Cancel</button>
+            <div class="pt-2 flex items-center justify-end">
               <button mat-raised-button color="warn" (click)="save()" [disabled]="form.invalid">Save Changes</button>
             </div>
           </form>
