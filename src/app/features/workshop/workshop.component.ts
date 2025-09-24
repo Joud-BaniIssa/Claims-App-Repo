@@ -72,9 +72,8 @@ import { ResponsiveService } from '../../core/services/responsive.service';
         <div class="card">
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-lg font-semibold text-gray-900">Repair Photos</h2>
-            <button mat-stroked-button color="primary" routerLink="/profile">
-              <mat-icon>collections</mat-icon>
-              <span class="ml-2">Gallery</span>
+            <button mat-raised-button routerLink="/documents" class="bg-gray-100 text-gray-800 rounded-xl hover:bg-gray-200">
+              Gallery
             </button>
           </div>
           <div class="grid grid-cols-3 gap-2">
