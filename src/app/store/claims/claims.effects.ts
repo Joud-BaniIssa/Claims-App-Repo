@@ -77,11 +77,22 @@ export class ClaimsEffects {
               append: action.page ? action.page > 1 : false
             });
           }),
-          catchError(error =>
-            of(ClaimsActions.loadClaimsFailure({
+          catchError((error: any) => {
+            const page = Number(params.page) || 1;
+            const limit = Number(params.limit) || 10;
+            if (error && error.status === 404) {
+              return of(ClaimsActions.loadClaimsSuccess({
+                claims: [],
+                total: 0,
+                page,
+                hasMore: false,
+                append: action.page ? action.page > 1 : false
+              }));
+            }
+            return of(ClaimsActions.loadClaimsFailure({
               error: error.message || 'Failed to load claims'
-            }))
-          )
+            }));
+          })
         );
       })
     )
@@ -216,11 +227,19 @@ export class ClaimsEffects {
               hasMore: response.hasMore
             });
           }),
-          catchError(error =>
-            of(ClaimsActions.loadClaimsFailure({
+          catchError((error: any) => {
+            if (error && error.status === 404) {
+              return of(ClaimsActions.loadClaimsSuccess({
+                claims: [],
+                total: 0,
+                page: 1,
+                hasMore: false
+              }));
+            }
+            return of(ClaimsActions.loadClaimsFailure({
               error: error.message || 'Search failed'
-            }))
-          )
+            }));
+          })
         )
       )
     )
