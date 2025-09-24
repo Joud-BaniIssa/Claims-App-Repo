@@ -15,12 +15,9 @@ import { ResponsiveService } from '../../core/services/responsive.service';
     <div [class]="containerClasses()">
       <div class="mx-auto w-full max-w-screen-sm">
         <!-- Header -->
-        <div class="mb-6 flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900">Documents Vault</h1>
-            <p class="text-gray-600">Securely store and access your important documents</p>
-          </div>
-          <button mat-stroked-button class="rounded-xl bg-gray-100 text-gray-800 hover:bg-gray-200">Gallery</button>
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-gray-900">Documents Vault</h1>
+          <p class="text-gray-600">Securely store and access your important documents</p>
         </div>
 
         <!-- Upload Dropzone -->
@@ -74,10 +71,9 @@ import { ResponsiveService } from '../../core/services/responsive.service';
             </div>
           </a>
           <a routerLink="/documents" class="doc-tile">
-            <div class="tile-icon"><mat-icon>assignment</mat-icon></div>
+            <div class="tile-icon"><mat-icon>collections</mat-icon></div>
             <div>
-              <div class="tile-title">Claims</div>
-              <div class="tile-sub">{{ counts.claims }} documents</div>
+              <div class="tile-title">Gallery</div>
             </div>
           </a>
         </div>
