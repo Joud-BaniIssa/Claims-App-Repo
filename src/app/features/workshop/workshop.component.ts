@@ -111,14 +111,14 @@ export class WorkshopComponent {
 
   // Mock photos
   workshopPhotos: string[] = [
-    'https://source.unsplash.com/400x400/?car,mechanic',
-    'https://source.unsplash.com/400x400/?auto,repair',
-    'https://source.unsplash.com/400x400/?garage,car'
+    'mock/car-1.svg',
+    'mock/car-2.svg',
+    'mock/car-3.svg'
   ];
 
   partsPhotos: string[] = [
-    'https://source.unsplash.com/400x400/?car,engine',
-    'https://source.unsplash.com/400x400/?auto,parts',
-    'https://source.unsplash.com/400x400/?brake,disc'
+    'mock/part-1.svg',
+    'mock/part-2.svg',
+    'mock/part-3.svg'
   ];
 }
