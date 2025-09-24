@@ -143,6 +143,15 @@ import { Claim } from '../../models/claims.model';
         }
       </div>
 
+      <div class="card mt-4">
+        <h2 class="text-xl font-bold text-gray-900 mb-2">Help & Guidance</h2>
+        <ul class="list-disc list-inside text-gray-700 space-y-1">
+          <li>Make sure everyone is safe and call emergency services if needed.</li>
+          <li>Take clear photos of the damage and the scene.</li>
+          <li>Collect witness info and police report if applicable.</li>
+        </ul>
+      </div>
+
     </div>
   `,
   styles: [`
