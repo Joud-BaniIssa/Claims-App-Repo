@@ -89,7 +89,7 @@ import { ResponsiveService } from '../../core/services/responsive.service';
 })
 export class DocumentsComponent {
   protected responsiveService = inject(ResponsiveService);
-  readonly containerClasses = computed(() => this.responsiveService.containerClass() + ' py-6 min-h-screen bg-gray-50');
+  readonly containerClasses = computed(() => this.responsiveService.containerClass() + ' py-6 min-h-screen bg-white');
 
   counts = { policy: 1, vehicle: 1, personal: 1, claims: 2 };
 
