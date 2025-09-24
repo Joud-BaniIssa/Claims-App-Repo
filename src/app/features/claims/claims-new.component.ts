@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, computed } from '@angular/core';
+import { Component, OnInit, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -82,6 +82,50 @@ import { ClaimInitiationForm } from '../../models/claims.model';
             </div>
           </div>
 
+          <!-- Photos Upload -->
+          <div>
+            <label class="block text-sm font-medium text-gray-900 mb-2">Photos</label>
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-white shadow-sm p-4 text-center">
+              <div class="mx-auto mb-3 w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+                <mat-icon class="text-gray-600">photo_library</mat-icon>
+              </div>
+              <p class="text-sm text-gray-600 mb-3">Add photos of the incident</p>
+              <button mat-stroked-button type="button" (click)="photoInput.click()">
+                <mat-icon>upload</mat-icon>
+                <span class="ml-2">Choose Photos</span>
+              </button>
+              <input #photoInput type="file" class="hidden" accept="image/*" multiple (change)="onPhotosSelected($event)" />
+
+              <div *ngIf="photos().length" class="mt-3 grid grid-cols-3 gap-2">
+                <div *ngFor="let f of photos()" class="bg-gray-50 rounded-xl p-2 text-[11px] text-gray-700 truncate">
+                  <mat-icon class="align-middle text-sm mr-1">image</mat-icon>{{ f.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documents Upload -->
+          <div>
+            <label class="block text-sm font-medium text-gray-900 mb-2">Documents</label>
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-white shadow-sm p-4 text-center">
+              <div class="mx-auto mb-3 w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+                <mat-icon class="text-gray-600">description</mat-icon>
+              </div>
+              <p class="text-sm text-gray-600 mb-3">Upload supporting documents (PDF, images)</p>
+              <button mat-stroked-button type="button" (click)="documentInput.click()">
+                <mat-icon>upload</mat-icon>
+                <span class="ml-2">Choose Documents</span>
+              </button>
+              <input #documentInput type="file" class="hidden" multiple accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.heic,.webp,application/pdf,image/*" (change)="onDocumentsSelected($event)" />
+
+              <div *ngIf="documents().length" class="mt-3 grid grid-cols-3 gap-2">
+                <div *ngFor="let f of documents()" class="bg-gray-50 rounded-xl p-2 text-[11px] text-gray-700 truncate">
+                  <mat-icon class="align-middle text-sm mr-1">insert_drive_file</mat-icon>{{ f.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="pt-2 flex justify-end">
             <button mat-raised-button color="warn" type="button" (click)="submitClaim()" [disabled]="form.invalid || isSubmitting()">
               {{ isSubmitting() ? 'Submitting...' : 'Submit Claim' }}
@@ -115,6 +159,9 @@ export class ClaimsNewComponent implements OnInit {
     policeReportNumber: ['']
   });
 
+  photos = signal<File[]>([]);
+  documents = signal<File[]>([]);
+
   readonly isSubmitting = this.store.selectSignal(selectClaimsSubmitting);
   readonly error = this.store.selectSignal(selectClaimsError);
 
@@ -125,7 +172,7 @@ export class ClaimsNewComponent implements OnInit {
   }
 
   saveDraft(): void {
-    const draftData = { ...this.form.value };
+    const draftData = { ...this.form.value, photoCount: this.photos().length, documentCount: this.documents().length };
     this.store.dispatch(ClaimsActions.saveDraft({ draftData }));
     this.snackBar.open('Draft saved', 'Close', { duration: 2000 });
   }
@@ -143,7 +190,9 @@ export class ClaimsNewComponent implements OnInit {
       policeReportNumber: this.form.value.policeReportNumber,
       emergencyServices: false,
       injuries: false,
-      otherVehiclesInvolved: false
+      otherVehiclesInvolved: false,
+      photoCount: this.photos().length,
+      documentCount: this.documents().length
     };
 
     this.store.dispatch(ClaimsActions.createClaim({ claimData }));
@@ -152,5 +201,19 @@ export class ClaimsNewComponent implements OnInit {
       this.router.navigate(['/dashboard']);
       this.snackBar.open('Claim submitted', 'Close', { duration: 3000 });
     }, 1200);
+  }
+
+  onPhotosSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = Array.from(input.files || []);
+    this.photos.set(files);
+    input.value = '';
+  }
+
+  onDocumentsSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = Array.from(input.files || []);
+    this.documents.set(files);
+    input.value = '';
   }
 }
