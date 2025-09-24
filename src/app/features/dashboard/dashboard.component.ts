@@ -217,7 +217,7 @@ export class DashboardComponent implements OnInit {
 
   // Responsive computed properties
   readonly containerClasses = computed(() => {
-    return this.responsiveService.containerClass() + ' safe-area-top safe-area-bottom min-h-screen bg-gray-50 flex flex-col';
+    return this.responsiveService.containerClass() + ' safe-area-top safe-area-bottom min-h-[900px] md:min-h-screen bg-gray-50 flex flex-col';
   });
 
   ngOnInit(): void {
