@@ -37,7 +37,7 @@ import { Claim } from '../../models/claims.model';
       <div class="mb-8">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Insurance Claims Dashboard</h1>
+            <p class="text-3xl font-bold text-gray-900 mb-2">Insurance Claims </p>
             <p class="text-gray-600">Quickly file new claims and track existing ones</p>
           </div>
           @if (!responsiveService.isMobile()) {
