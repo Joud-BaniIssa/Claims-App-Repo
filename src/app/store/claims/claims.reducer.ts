@@ -63,14 +63,36 @@ export const claimsReducer = createReducer(
     error: null
   })),
 
-  on(ClaimsActions.createClaimSuccess, (state, { response }) => ({
-    ...state,
-    submitting: false,
-    error: null,
-    draftClaim: null,
-    // Invalidate cache to force refresh
-    cacheValid: false
-  })),
+  on(ClaimsActions.createClaimSuccess, (state, { response }) => {
+    const now = new Date();
+    const newClaim: Claim = {
+      id: response.claimId || String(Date.now()),
+      claimNumber: response.claimNumber || `CLA-${String(state.total + 1).padStart(4, '0')}`,
+      policyNumber: 'POLICY-TEMP',
+      status: 'submitted',
+      type: 'other',
+      dateReported: now,
+      dateOfIncident: now,
+      location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: response.message || 'New claim submitted',
+      documents: [],
+      photos: [],
+      timeline: [],
+      deductible: 0,
+      createdAt: now,
+      updatedAt: now
+    };
+
+    return {
+      ...state,
+      submitting: false,
+      error: null,
+      draftClaim: null,
+      claims: [newClaim, ...state.claims],
+      total: state.total + 1,
+      cacheValid: true
+    };
+  }),
 
   on(ClaimsActions.createClaimFailure, (state, { error }) => ({
     ...state,
