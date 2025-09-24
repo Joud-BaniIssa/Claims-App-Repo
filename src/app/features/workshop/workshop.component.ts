@@ -76,16 +76,21 @@ import { ResponsiveService } from '../../core/services/responsive.service';
               Gallery
             </button>
           </div>
+          <!-- Workshop Photos -->
           <div class="grid grid-cols-3 gap-2">
-            <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center">
-              <mat-icon class="text-gray-400 text-3xl">image</mat-icon>
-            </div>
-            <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center">
-              <mat-icon class="text-gray-400 text-3xl">image</mat-icon>
-            </div>
-            <div class="aspect-square bg-gray-100 rounded-xl flex items-center justify-center">
-              <mat-icon class="text-gray-400 text-3xl">image</mat-icon>
-            </div>
+            @for (photo of workshopPhotos; track photo) {
+              <div class="aspect-square overflow-hidden rounded-xl bg-gray-100">
+                <img [src]="photo" alt="Workshop photo" loading="lazy" class="w-full h-full object-cover"/>
+              </div>
+            }
+          </div>
+          <!-- Parts Photos -->
+          <div class="mt-3 grid grid-cols-3 gap-2">
+            @for (photo of partsPhotos; track photo) {
+              <div class="aspect-square overflow-hidden rounded-xl bg-gray-100">
+                <img [src]="photo" alt="Repair part photo" loading="lazy" class="w-full h-full object-cover"/>
+              </div>
+            }
           </div>
         </div>
 
@@ -103,4 +108,17 @@ import { ResponsiveService } from '../../core/services/responsive.service';
 export class WorkshopComponent {
   protected responsiveService = inject(ResponsiveService);
   readonly containerClasses = computed(() => this.responsiveService.containerClass() + ' py-6 min-h-screen bg-gray-50');
+
+  // Mock photos
+  workshopPhotos: string[] = [
+    'https://source.unsplash.com/400x400/?car,mechanic',
+    'https://source.unsplash.com/400x400/?auto,repair',
+    'https://source.unsplash.com/400x400/?garage,car'
+  ];
+
+  partsPhotos: string[] = [
+    'https://source.unsplash.com/400x400/?car,engine',
+    'https://source.unsplash.com/400x400/?auto,parts',
+    'https://source.unsplash.com/400x400/?brake,disc'
+  ];
 }
