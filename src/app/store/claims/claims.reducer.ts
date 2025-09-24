@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { ClaimsState, initialClaimsState } from './claims.state';
 import * as ClaimsActions from './claims.actions';
+import { Claim } from '../../models/claims.model';
 
 export const claimsReducer = createReducer(
   initialClaimsState,
