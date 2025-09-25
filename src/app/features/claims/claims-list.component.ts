@@ -61,29 +61,17 @@ import { MatIconModule } from '@angular/material/icon';
               <p class="text-gray-600 text-sm">Status updates and decisions</p>
             </div>
           </div>
-          <ul class="divide-y divide-gray-100">
-            <li class="py-3 flex items-center justify-between">
+          <div class="divide-y divide-gray-100 scroll-list pr-1">
+            <div *ngFor="let claim of displayedClaims()" class="py-3 flex items-center justify-between">
               <div>
-                <p class="font-medium text-gray-900">CLA-0001 • Auto Collision</p>
-                <p class="text-sm text-gray-600">Filed 2d ago</p>
+                <p class="font-medium text-gray-900">{{ claim.claimNumber }} • {{ getClaimTypeLabel(claim.type) }}</p>
+                <p class="text-sm text-gray-600">Reported {{ claim.dateReported | date:'mediumDate' }}</p>
               </div>
-              <span class="px-3 py-1 rounded-lg status-processing text-sm">Pending</span>
-            </li>
-            <li class="py-3 flex items-center justify-between">
-              <div>
-                <p class="font-medium text-gray-900">CLA-0004 • Auto Comprehensive</p>
-                <p class="text-sm text-gray-600">Filed 1w ago</p>
-              </div>
-              <span class="px-3 py-1 rounded-lg status-approved text-sm">Approved</span>
-            </li>
-            <li class="py-3 flex items-center justify-between">
-              <div>
-                <p class="font-medium text-gray-900">CLA-0005 • Vandalism</p>
-                <p class="text-sm text-gray-600">Filed 1w ago</p>
-              </div>
-              <span class="px-3 py-1 rounded-lg status-rejected text-sm">Denied</span>
-            </li>
-          </ul>
+              <span [class]="getStatusChipClass(claim.status) + ' px-3 py-1 rounded-lg text-sm'">
+                {{ normalizeStatusLabel(claim.status) }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
