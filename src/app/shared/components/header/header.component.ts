@@ -21,6 +21,9 @@ import { MatDividerModule } from '@angular/material/divider';
         </div>
       </a>
       <span class="spacer"></span>
+      <button mat-icon-button routerLink="/notifications" aria-label="Notifications">
+        <mat-icon>notifications</mat-icon>
+      </button>
       <button mat-icon-button [matMenuTriggerFor]="profileMenu" aria-label="Profile">
         <mat-icon>account_circle</mat-icon>
       </button>
