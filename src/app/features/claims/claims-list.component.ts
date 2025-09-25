@@ -84,5 +84,78 @@ import { MatIconModule } from '@angular/material/icon';
       </div>
     </div>
   `
+,
+  styles: [`
+    .scroll-list { max-height: 60vh; overflow-y: auto; }
+  `]
 })
-export class ClaimsListComponent {}
+export class ClaimsListComponent implements OnInit {
+  private store = inject(Store);
+
+  readonly mockClaims: Claim[] = [
+    {
+      id: '1', claimNumber: 'CLA-0001', policyNumber: 'POL-12345', status: 'submitted', type: 'auto_collision',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Rear bumper collision at intersection.', documents: [], photos: [], timeline: [], deductible: 500, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '2', claimNumber: 'CLA-0002', policyNumber: 'POL-55555', status: 'under_review', type: 'property_damage',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Storm damage to roof shingles.', documents: [], photos: [], timeline: [], deductible: 1000, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '3', claimNumber: 'CLA-0003', policyNumber: 'POL-77777', status: 'processing', type: 'theft',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Stolen catalytic converter.', documents: [], photos: [], timeline: [], deductible: 250, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '4', claimNumber: 'CLA-0004', policyNumber: 'POL-88888', status: 'approved', type: 'auto_comprehensive',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Windshield cracked by debris.', documents: [], photos: [], timeline: [], deductible: 200, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '5', claimNumber: 'CLA-0005', policyNumber: 'POL-99999', status: 'rejected', type: 'vandalism',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Graffiti on garage door.', documents: [], photos: [], timeline: [], deductible: 300, createdAt: new Date(), updatedAt: new Date()
+    }
+  ];
+
+  readonly recentClaims = this.store.selectSignal(selectRecentClaims);
+  readonly displayedClaims = computed(() => {
+    const list = this.recentClaims();
+    return (Array.isArray(list) && list.length > 0) ? list : this.mockClaims;
+  });
+
+  ngOnInit(): void {
+    this.store.dispatch(ClaimsActions.loadClaims({}));
+  }
+
+  normalizeStatusLabel(status: string): 'Approved' | 'Pending' | 'Denied' {
+    const s = (status || '').toLowerCase();
+    if (s === 'approved' || s === 'partially_approved') return 'Approved';
+    if (s === 'rejected' || s === 'denied') return 'Denied';
+    return 'Pending';
+  }
+
+  getStatusChipClass(status: string): string {
+    const label = this.normalizeStatusLabel(status);
+    if (label === 'Approved') return 'bg-green-100 text-green-800 border border-green-200';
+    if (label === 'Denied') return 'bg-red-100 text-red-800 border border-red-200';
+    return 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+  }
+
+  getClaimTypeLabel(type: string): string {
+    switch (type) {
+      case 'auto_collision': return 'Auto Collision';
+      case 'auto_comprehensive': return 'Auto Comprehensive';
+      case 'auto_liability': return 'Auto Liability';
+      case 'property_damage': return 'Property Damage';
+      case 'theft': return 'Theft';
+      case 'vandalism': return 'Vandalism';
+      case 'natural_disaster': return 'Natural Disaster';
+      case 'personal_injury': return 'Personal Injury';
+      case 'medical': return 'Medical';
+      default: return 'Claim';
+    }
+  }
+}
