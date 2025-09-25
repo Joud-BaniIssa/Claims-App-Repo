@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, computed } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as ClaimsActions from '../../store/claims/claims.actions';
+import { selectRecentClaims } from '../../store/claims/claims.selectors';
+import { Claim } from '../../models/claims.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
