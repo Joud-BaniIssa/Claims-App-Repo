@@ -189,6 +189,9 @@ export interface ClaimInitiationForm {
   otherVehiclesInvolved: boolean;
   otherDriverInfo?: OtherDriverInfo[];
   witnessInfo?: WitnessInfo[];
+  // Add these new optional properties
+  photoCount?: number;
+  documentCount?: number;
 }
 
 export interface OtherDriverInfo {

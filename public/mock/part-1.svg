@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f5f5f5"/>
+  <g fill="#e53935">
+    <rect x="90" y="160" width="220" height="30" rx="6"/>
+    <rect x="90" y="210" width="220" height="30" rx="6"/>
+    <rect x="90" y="260" width="220" height="30" rx="6"/>
+  </g>
+  <text x="200" y="330" font-size="18" font-family="Arial, Helvetica, sans-serif" fill="#616161" text-anchor="middle">Mock • Replacement Part</text>
+</svg>

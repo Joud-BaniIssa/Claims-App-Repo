@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -9,15 +9,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
 
-import { EmergencyWidgetComponent } from '../../shared/components/emergency-widget/emergency-widget.component';
 import { ResponsiveService } from '../../core/services/responsive.service';
 import * as ClaimsActions from '../../store/claims/claims.actions';
-import { 
-  selectRecentClaims, 
-  selectClaimsSummary, 
-  selectClaimsLoading,
-  selectPendingClaims 
+import {
+  selectRecentClaims,
+  selectClaimsSummary,
+  selectClaimsLoading
 } from '../../store/claims/claims.selectors';
+import { Claim } from '../../models/claims.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,8 +29,7 @@ import {
     MatCardModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatRippleModule,
-    EmergencyWidgetComponent
+    MatRippleModule
   ],
   template: `
     <div [class]="containerClasses()">
@@ -39,172 +37,75 @@ import {
       <div class="mb-8">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Insurance Claims Dashboard</h1>
-            <p class="text-gray-600">Manage your insurance claims with AI-powered assistance</p>
+            <p class="text-3xl font-bold text-gray-900 mb-2">Insurance Claims </p>
+            <p class="text-gray-600">Quickly file new claims and track existing ones</p>
           </div>
           @if (!responsiveService.isMobile()) {
-            <div class="flex space-x-3">
-              <button 
-                mat-raised-button 
-                color="primary"
+            <div class="flex flex-col items-end space-y-2">
+              <button
+                mat-raised-button
+                color="warn"
                 routerLink="/claims/new"
                 class="btn-primary">
                 <mat-icon>add</mat-icon>
                 New Claim
               </button>
-              <button 
-                mat-stroked-button
-                (click)="refreshData()"
-                [disabled]="isLoading()">
-                <mat-icon>refresh</mat-icon>
-                Refresh
-              </button>
+              <div class="flex items-center space-x-2">
+                <button
+                  mat-stroked-button
+                  routerLink="/workshop"
+                  >
+                  <mat-icon>build</mat-icon>
+                  Workshop
+                </button>
+                <button
+                  mat-stroked-button
+                  (click)="refreshData()"
+                  [disabled]="isLoading()">
+                  <mat-icon>refresh</mat-icon>
+                  Refresh
+                </button>
+              </div>
             </div>
           }
         </div>
 
         @if (responsiveService.isMobile()) {
-          <div class="flex space-x-3 mb-6">
-            <button 
-              mat-raised-button 
-              color="primary"
-              routerLink="/claims/new"
-              class="flex-1 btn-primary">
-              <mat-icon>add</mat-icon>
-              New Claim
+          <div class="flex flex-col space-y-2 mb-6">
+            <div class="flex space-x-3">
+              <button
+                mat-raised-button
+                color="warn"
+                routerLink="/claims/new"
+                class="flex-1 btn-primary">
+                <mat-icon>add</mat-icon>
+                New Claim
+              </button>
+              <button
+                mat-icon-button
+                (click)="refreshData()"
+                [disabled]="isLoading()"
+                class="border border-gray-300">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </div>
+            <button
+              mat-stroked-button
+              routerLink="/workshop"
+              
+              class="w-full">
+              <mat-icon>build</mat-icon>
+              Workshop
             </button>
-            <button 
-              mat-icon-button
-              (click)="refreshData()"
-              [disabled]="isLoading()"
-              class="border border-gray-300">
-              <mat-icon>refresh</mat-icon>
-            </button>
           </div>
         }
       </div>
 
-      <!-- Emergency Widget -->
-      <div class="mb-8">
-        <app-emergency-widget />
-      </div>
-
-      <!-- Quick Stats Cards -->
-      <div [class]="statsGridClasses()" class="mb-8">
-        <div class="card">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Total Claims</p>
-              <p class="text-2xl font-bold text-gray-900">{{ claimsSummary()?.totalClaims || 0 }}</p>
-            </div>
-            <div class="p-3 bg-blue-100 rounded-xl">
-              <mat-icon class="text-blue-600">description</mat-icon>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Pending</p>
-              <p class="text-2xl font-bold text-orange-600">{{ claimsSummary()?.pendingClaims || 0 }}</p>
-            </div>
-            <div class="p-3 bg-orange-100 rounded-xl">
-              <mat-icon class="text-orange-600">hourglass_empty</mat-icon>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-gray-600 mb-1">Total Damage</p>
-              <p class="text-2xl font-bold text-red-600">
-                {{ (claimsSummary()?.totalEstimatedDamage || 0) | currency }}
-              </p>
-            </div>
-            <div class="p-3 bg-red-100 rounded-xl">
-              <mat-icon class="text-red-600">attach_money</mat-icon>
-            </div>
-          </div>
-        </div>
-
-        @if (!responsiveService.isMobile()) {
-          <div class="card">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600 mb-1">Avg. Processing</p>
-                <p class="text-2xl font-bold text-green-600">{{ claimsSummary()?.averageProcessingTime || 0 }} days</p>
-              </div>
-              <div class="p-3 bg-green-100 rounded-xl">
-                <mat-icon class="text-green-600">schedule</mat-icon>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
-
-      <!-- Quick Actions -->
-      <div [class]="actionsGridClasses()" class="mb-8">
-        <button 
-          mat-stroked-button
-          routerLink="/claims/new"
-          class="p-6 h-auto flex flex-col items-center space-y-3 hover:bg-gray-50 transition-colors">
-          <div class="p-4 bg-primary-100 rounded-full">
-            <mat-icon class="text-primary-600 text-2xl">add_circle</mat-icon>
-          </div>
-          <div class="text-center">
-            <h3 class="font-semibold text-gray-900">File New Claim</h3>
-            <p class="text-sm text-gray-600">Start a new insurance claim</p>
-          </div>
-        </button>
-
-        <button 
-          mat-stroked-button
-          routerLink="/claims"
-          class="p-6 h-auto flex flex-col items-center space-y-3 hover:bg-gray-50 transition-colors">
-          <div class="p-4 bg-blue-100 rounded-full">
-            <mat-icon class="text-blue-600 text-2xl">list</mat-icon>
-          </div>
-          <div class="text-center">
-            <h3 class="font-semibold text-gray-900">View All Claims</h3>
-            <p class="text-sm text-gray-600">Manage existing claims</p>
-          </div>
-        </button>
-
-        <button 
-          mat-stroked-button
-          routerLink="/documents"
-          class="p-6 h-auto flex flex-col items-center space-y-3 hover:bg-gray-50 transition-colors">
-          <div class="p-4 bg-green-100 rounded-full">
-            <mat-icon class="text-green-600 text-2xl">folder</mat-icon>
-          </div>
-          <div class="text-center">
-            <h3 class="font-semibold text-gray-900">Document Vault</h3>
-            <p class="text-sm text-gray-600">Upload and manage documents</p>
-          </div>
-        </button>
-
-        @if (!responsiveService.isMobile()) {
-          <button 
-            mat-stroked-button
-            routerLink="/profile"
-            class="p-6 h-auto flex flex-col items-center space-y-3 hover:bg-gray-50 transition-colors">
-            <div class="p-4 bg-purple-100 rounded-full">
-              <mat-icon class="text-purple-600 text-2xl">person</mat-icon>
-            </div>
-            <div class="text-center">
-              <h3 class="font-semibold text-gray-900">Profile</h3>
-              <p class="text-sm text-gray-600">Manage your profile</p>
-            </div>
-          </button>
-        }
-      </div>
 
       <!-- Recent Claims -->
       <div class="card">
         <div class="flex items-center justify-between mb-6">
-          <h2 class="text-xl font-bold text-gray-900">Recent Claims</h2>
+          <h2 class="text-xl font-bold text-gray-900">Track Claims</h2>
           <button 
             mat-button 
             routerLink="/claims"
@@ -217,68 +118,40 @@ import {
           <div class="flex justify-center py-8">
             <mat-spinner diameter="40"></mat-spinner>
           </div>
-        } @else if (recentClaims().length === 0) {
-          <div class="text-center py-8">
-            <mat-icon class="text-6xl text-gray-300 mb-4">description</mat-icon>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No Claims Yet</h3>
-            <p class="text-gray-600 mb-4">Start by filing your first insurance claim</p>
-            <button 
-              mat-raised-button 
-              color="primary"
-              routerLink="/claims/new">
-              File Your First Claim
-            </button>
-          </div>
         } @else {
           <div class="space-y-4">
-            @for (claim of recentClaims(); track claim.id) {
+            @for (claim of displayedClaims(); track claim.id) {
               <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
                     <div [class]="getClaimTypeIconClass(claim.type)" class="p-2 rounded-lg">
                       <mat-icon>{{ getClaimTypeIcon(claim.type) }}</mat-icon>
                     </div>
                     <div>
                       <h3 class="font-semibold text-gray-900">{{ claim.claimNumber }}</h3>
-                      <p class="text-sm text-gray-600">{{ claim.type | titlecase }}</p>
+                      <p class="text-sm text-gray-600">{{ getClaimTypeLabel(claim.type) }}</p>
                     </div>
                   </div>
-                  <mat-chip 
-                    [class]="getStatusChipClass(claim.status)"
-                    class="text-xs font-medium">
-                    {{ claim.status | titlecase }}
-                  </mat-chip>
+                  <span
+                    [class]="getStatusChipClass(claim.status) + ' inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border'">
+                    {{ normalizeStatusLabel(claim.status) }}
+                  </span>
                 </div>
-                
-                <p class="text-sm text-gray-700 mb-3 line-clamp-2">{{ claim.description }}</p>
-                
-                <div class="flex items-center justify-between text-sm text-gray-600">
-                  <span>{{ claim.dateReported | date:'mediumDate' }}</span>
-                  <span>{{ claim.estimatedDamage | currency }}</span>
-                </div>
-                
-                @if (claim.emergencyFlag) {
-                  <div class="mt-2 flex items-center space-x-1 text-red-600">
-                    <mat-icon class="text-sm">priority_high</mat-icon>
-                    <span class="text-xs font-medium">Emergency Priority</span>
-                  </div>
-                }
               </div>
             }
           </div>
         }
       </div>
 
-      <!-- Floating Action Button for Mobile -->
-      @if (responsiveService.isMobile()) {
-        <button 
-          mat-fab
-          color="primary"
-          routerLink="/claims/new"
-          class="fixed bottom-6 right-6 z-10 shadow-lg">
-          <mat-icon>add</mat-icon>
-        </button>
-      }
+      <div class="card mt-4 help-card">
+        <h2 class="text-xl font-bold text-gray-900 mb-2">Help & Guidance</h2>
+        <ul class="list-disc list-inside text-gray-700 space-y-1">
+          <li>Make sure everyone is safe and call emergency services if needed.</li>
+          <li>Take clear photos of the damage and the scene.</li>
+          <li>Collect witness info and police report if applicable.</li>
+        </ul>
+      </div>
+
     </div>
   `,
   styles: [`
@@ -305,12 +178,54 @@ import {
         border-left: none;
         border-right: none;
       }
+      /* Keep rounded edges for Help & Guidance */
+      .help-card {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 1rem !important;
+        border-left: 1px solid rgba(229, 231, 235, 1) !important; /* gray-200 */
+        border-right: 1px solid rgba(229, 231, 235, 1) !important;
+      }
     }
   `]
 })
 export class DashboardComponent implements OnInit {
   private store = inject(Store);
   protected responsiveService = inject(ResponsiveService);
+
+  // Mock recent claims fallback
+  readonly mockClaims: Claim[] = [
+    {
+      id: '1', claimNumber: 'CLA-0001', policyNumber: 'POL-12345', status: 'submitted', type: 'auto_collision',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Rear bumper collision at intersection.', documents: [], photos: [], timeline: [], deductible: 500, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '2', claimNumber: 'CLA-0002', policyNumber: 'POL-55555', status: 'under_review', type: 'property_damage',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Storm damage to roof shingles.', documents: [], photos: [], timeline: [], deductible: 1000, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '3', claimNumber: 'CLA-0003', policyNumber: 'POL-77777', status: 'processing', type: 'theft',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Stolen catalytic converter.', documents: [], photos: [], timeline: [], deductible: 250, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '4', claimNumber: 'CLA-0004', policyNumber: 'POL-88888', status: 'approved', type: 'auto_comprehensive',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Windshield cracked by debris.', documents: [], photos: [], timeline: [], deductible: 200, createdAt: new Date(), updatedAt: new Date()
+    },
+    {
+      id: '5', claimNumber: 'CLA-0005', policyNumber: 'POL-99999', status: 'rejected', type: 'vandalism',
+      dateReported: new Date(), dateOfIncident: new Date(), location: { address: '', city: '', state: '', zipCode: '', country: 'US' },
+      description: 'Graffiti on garage door.', documents: [], photos: [], timeline: [], deductible: 300, createdAt: new Date(), updatedAt: new Date()
+    }
+  ];
+
+  readonly displayedClaims = computed(() => {
+    const list = this.recentClaims();
+    return (Array.isArray(list) && list.length > 0) ? list : this.mockClaims;
+  });
 
   // Store selectors
   readonly recentClaims = this.store.selectSignal(selectRecentClaims);
@@ -319,33 +234,10 @@ export class DashboardComponent implements OnInit {
 
   // Responsive computed properties
   readonly containerClasses = computed(() => {
-    return this.responsiveService.containerClass() + ' safe-area-top safe-area-bottom min-h-screen bg-gray-50';
-  });
-
-  readonly statsGridClasses = computed(() => {
-    const base = 'grid gap-4';
-    if (this.responsiveService.isMobile()) {
-      return `${base} grid-cols-1 sm:grid-cols-2`;
-    }
-    if (this.responsiveService.isTablet()) {
-      return `${base} grid-cols-2 lg:grid-cols-3`;
-    }
-    return `${base} grid-cols-4`;
-  });
-
-  readonly actionsGridClasses = computed(() => {
-    const base = 'grid gap-4';
-    if (this.responsiveService.isMobile()) {
-      return `${base} grid-cols-2`;
-    }
-    if (this.responsiveService.isTablet()) {
-      return `${base} grid-cols-3`;
-    }
-    return `${base} grid-cols-4`;
+    return this.responsiveService.containerClass() + ' safe-area-top safe-area-bottom min-h-[900px] md:min-h-screen bg-gray-50 flex flex-col';
   });
 
   ngOnInit(): void {
-    // Load initial claims data
     this.store.dispatch(ClaimsActions.loadClaims({}));
   }
 
@@ -354,6 +246,28 @@ export class DashboardComponent implements OnInit {
   }
 
   // UI Helper Methods
+  normalizeStatusLabel(status: string): 'Approved' | 'Pending' | 'Denied' {
+    const s = (status || '').toLowerCase();
+    if (s === 'approved' || s === 'partially_approved') return 'Approved';
+    if (s === 'rejected' || s === 'denied') return 'Denied';
+    return 'Pending';
+  }
+
+  getClaimTypeLabel(type: string): string {
+    switch (type) {
+      case 'auto_collision': return 'Auto Collision';
+      case 'auto_comprehensive': return 'Auto Comprehensive';
+      case 'auto_liability': return 'Auto Liability';
+      case 'property_damage': return 'Property Damage';
+      case 'theft': return 'Theft';
+      case 'vandalism': return 'Vandalism';
+      case 'natural_disaster': return 'Natural Disaster';
+      case 'personal_injury': return 'Personal Injury';
+      case 'medical': return 'Medical';
+      default: return 'Claim';
+    }
+  }
+
   getClaimTypeIcon(type: string): string {
     switch (type) {
       case 'auto_collision': return 'car_crash';
@@ -370,36 +284,13 @@ export class DashboardComponent implements OnInit {
   }
 
   getClaimTypeIconClass(type: string): string {
-    const base = 'text-white';
-    switch (type) {
-      case 'auto_collision': return `${base} bg-red-500`;
-      case 'auto_comprehensive': return `${base} bg-blue-500`;
-      case 'auto_liability': return `${base} bg-purple-500`;
-      case 'property_damage': return `${base} bg-green-500`;
-      case 'theft': return `${base} bg-orange-500`;
-      case 'vandalism': return `${base} bg-yellow-500`;
-      case 'natural_disaster': return `${base} bg-indigo-500`;
-      case 'personal_injury': return `${base} bg-pink-500`;
-      case 'medical': return `${base} bg-teal-500`;
-      default: return `${base} bg-gray-500`;
-    }
+    return 'text-white bg-primary-500';
   }
 
   getStatusChipClass(status: string): string {
-    switch (status) {
-      case 'submitted':
-      case 'under_review':
-        return 'status-new';
-      case 'investigating':
-      case 'processing':
-        return 'status-processing';
-      case 'approved':
-      case 'partially_approved':
-        return 'status-approved';
-      case 'rejected':
-        return 'status-rejected';
-      default:
-        return 'bg-gray-100 text-gray-800 border border-gray-200';
-    }
+    const label = this.normalizeStatusLabel(status);
+    if (label === 'Approved') return 'bg-green-100 text-green-800 border border-green-200';
+    if (label === 'Denied') return 'bg-red-100 text-red-800 border border-red-200';
+    return 'bg-yellow-100 text-yellow-800 border border-yellow-200';
   }
 }
