@@ -95,7 +95,7 @@ import { ResponsiveService } from '../../core/services/responsive.service';
         </div>
 
         <!-- Actions -->
-        <div class="flex items-center justify-end">
+        <div class="flex items-center justify-center">
           <button mat-raised-button color="warn">
             <mat-icon>directions_car</mat-icon>
             <span class="ml-2">Request Car Delivery</span>

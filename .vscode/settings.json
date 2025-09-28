@@ -1,0 +1,17 @@
+{
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "typescript": "typescript",
+    "javascript": "javascript"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["class\\s*=\\s*[\"']([^\"']*)[\"']", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["class\\s*=\\s*[\"']([^\"']*)[\"']", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ]
+}
