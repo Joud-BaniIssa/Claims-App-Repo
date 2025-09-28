@@ -23,8 +23,8 @@ import { ClaimInitiationForm } from '../../models/claims.model';
       <div class="mb-8">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <button mat-icon-button routerLink="/dashboard" aria-label="Back">
-              <mat-icon>arrow_back</mat-icon>
+            <button mat-icon-button routerLink="/dashboard" aria-label="Back" class="flex justify-center items-center">
+              <mat-icon class="text-gray-900 flex justify-center items-center mb-[2px]">arrow_back</mat-icon>
             </button>
             <div>
               <h1 class="page-title text-3xl font-bold text-gray-900">File New Claim</h1>

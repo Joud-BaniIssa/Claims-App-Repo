@@ -61,7 +61,8 @@ import { Claim } from '../../models/claims.model';
                 <button
                   mat-stroked-button
                   (click)="refreshData()"
-                  [disabled]="isLoading()">
+                  [disabled]="isLoading()"
+                  class="refresh-btn">
                   <mat-icon>refresh</mat-icon>
                   Refresh
                 </button>
@@ -72,7 +73,7 @@ import { Claim } from '../../models/claims.model';
 
         @if (responsiveService.isMobile()) {
           <div class="flex flex-col space-y-2 mb-6">
-            <div class="flex space-x-3">
+            <div class="flex space-x-3 justify-between items-center">
               <button
                 mat-raised-button
                 color="warn"
@@ -85,7 +86,7 @@ import { Claim } from '../../models/claims.model';
                 mat-icon-button
                 (click)="refreshData()"
                 [disabled]="isLoading()"
-                class="border border-gray-300">
+                class="border border-gray-400 flex justify-center items-center refresh-btn">
                 <mat-icon>refresh</mat-icon>
               </button>
             </div>
@@ -164,6 +165,30 @@ import { Claim } from '../../models/claims.model';
 
     mat-chip {
       border-radius: 12px !important;
+    }
+
+    /* Scoped styling for Refresh buttons */
+    .refresh-btn {
+      border-radius: 8px;
+      transition: box-shadow 150ms ease, transform 150ms ease;
+      border: 1px solid rgb(206, 206, 206);
+      width: 44px;
+      height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(206, 206, 206);
+      }
+
+    .refresh-btn:hover {
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .refresh-btn:disabled {
+      opacity: 0.6;
+      box-shadow: none;
+      transform: none;
     }
 
     .mat-mdc-fab {
