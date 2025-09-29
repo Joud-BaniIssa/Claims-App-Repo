@@ -39,6 +39,9 @@ export const appConfig: ApplicationConfig = {
     }),
 
     // Touch gesture support
-    importProvidersFrom(HammerModule)
+    importProvidersFrom(HammerModule), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          })
   ]
 };
